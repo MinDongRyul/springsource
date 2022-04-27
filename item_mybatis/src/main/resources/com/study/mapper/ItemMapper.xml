@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.mapper.ItemMapper"> <!-- 위치가다르면 namespace wrong name 에러 발생 -->
+	<!-- sql생성 -->
+	<!-- 아이템 추가 : num(item_seq.nextval), category, name, content, psize, price -->
+	<insert id="insert">
+		insert into item(num, category, name, content, psize, price) 
+		values(item_seq.nextval, #{category}, #{name}, #{content}, #{psize}, #{price})
+	</insert>
+	
+	<!-- 아이템 조회 : num이 일치하는 아이템 조회 
+					 num, category, name, content, psize, price 
+	-->
+	<select id="selectOne" resultType="com.study.dto.ItemDTO">
+		select num, category, name, content, psize, price from item where num = #{num}
+	</select>
+	
+	<!-- 아이템 삭제 : num이 일치하는 아이템 삭제 -->
+	<delete id="delete">
+		delete from item where num = #{num}
+	</delete>
+	
+	<!-- 아이템 수정 : num이 일치하는 아이템 수정
+					psize, price 
+	-->
+	<update id="update">
+		update item 
+		set psize = #{psize}, price = #{price} 
+		where num = #{num}
+	</update>
+	
+	<!-- 아이템 전체 조회 : num, category, name, content, psize, price -->
+	<select id="select" resultType="com.study.dto.ItemDTO"> 
+		select num, category, name, content, psize, price from item
+	</select>
+</mapper>

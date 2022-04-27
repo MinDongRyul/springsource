@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- spring bean : 스프링에서 생성한 후 관리하는 객체 / singleton 관리 -->
+	<!-- com.study.myapp.di.MessageEn클래스를 생성해서 관리해달라고 등록 -->
+	<bean id="en" class="com.study.myapp.di.MessageEn"/>
+	<bean id="ko" class="com.study.myapp.di.MessageKo"/>
+	
+	<!-- new SonySpeaker() 개념(객체 생성) -->
+	<bean id="sony" class="com.study.myapp.di.SonySpeaker"/>
+	<bean id="apple" class="com.study.myapp.di.AppleSpeaker"/>
+	
+	<!-- <bean id="samTV" class="com.study.myapp.di.SamsungTV">
+		<constructor-arg ref="sony"/> constructor : 생성된 sony 객체를 생성자에게 주입
+	</bean> -->
+	
+	<bean id="samTV" class="com.study.myapp.di.SamsungTV">
+		<property name="speaker" ref="apple"/> <!-- property : 생성된 sony 객체를 setter메소드에게 주입 -->
+	</bean>
+	
+	<bean id="lgTV" class="com.study.myapp.di.LgTV">
+		<constructor-arg ref="sony"/> <!-- lgtv에 1개를 받는 생성자가 있어야 주입이 가능하다. -->
+	</bean>
+</beans>

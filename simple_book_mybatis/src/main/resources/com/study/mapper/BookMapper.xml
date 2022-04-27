@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.mapper.BookMapper">
+	<!-- sql구문 -->
+	<select id="select" resultType="com.study.myapp.dto.BookDTO">
+		select * from booktbl
+	</select>
+
+	<insert id="insert">
+		insert into booktbl(code, title, writer, price) 
+		values(#{code}, #{title}, #{writer}, #{price})
+	</insert>
+	
+	<update id="update">
+		update booktbl
+		set price = #{price}
+		where code = #{code}
+	</update>
+	
+	<delete id="delete">
+		delete from booktbl where code = #{code} 
+	</delete>
+	
+	<select id="search" resultType="com.study.myapp.dto.BookDTO">
+		select * from booktbl where ${criteria} = #{keyword}
+
+		<!-- <if test="criteria=='code'.toString()">
+			code = #{keyword}
+		</if>
+		<if test="criteria=='writer'.toString()">
+			writer like '%'||#{keyword}||'%'
+		</if> -->
+	</select>
+</mapper>

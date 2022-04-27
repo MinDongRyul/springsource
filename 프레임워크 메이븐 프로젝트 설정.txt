@@ -1,0 +1,21 @@
+1. pom.xml 설정
+11 
+5.3.19 
+11 
+11
+
+<dependency> 추가
+
+2. 패키지 생성
+service, mapper, dto
+
+3.resources에 config.xml생성
+src/main/java/com.study.mapper와 같은 경로에 
+src/main/resources/com/study/mapper 에 mapper생성
+
+4.
+DTO : DB의 각 데이터들을 정의
+Service : CRUD작업 
+ServiceImpl : 여기서 ItemMapper로 연결해서 DB작업
+ItemMapper : resources와 연동해서 sql작업을 하도록 도와줌
+여기서의 메소드 이름과 ItemMapper.xml의 각각 id와의 이름을 맞춰줘야함

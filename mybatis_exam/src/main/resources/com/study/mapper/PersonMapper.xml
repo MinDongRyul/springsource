@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.mapper.PersonMapper">
+  <!-- sql 구문 작성 : 세미콜론 없어야 함, #{}작성 확인, id 값은 interface의 메소드 명과 일치 -->
+  <insert id="insert">
+  	insert into person(id, name) values(#{id}, #{name})
+  </insert>
+  
+  <update id="update">
+  	update person set name = #{name} where id = #{id}  
+  </update>
+  
+  <delete id="delete">
+  	delete from person where id = #{id}
+  </delete>
+  
+  <!-- select count(*) from person => resultType = "int"
+	   select * from person where id = 1 => resultType = "String" 
+  -->
+  
+  <select id="select" resultType="com.study.dto.PersonDTO">
+  	select * from person where id = #{id}
+  </select>
+  
+</mapper>
