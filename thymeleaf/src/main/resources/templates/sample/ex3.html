@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>Thymeleaf 예제3</h1>
+	<h2 th:text="${dto}"></h2>
+	<ul>
+		<li th:text="${dto.mno}"></li>
+		<li th:text="${dto.mid}"></li>
+		<li th:text="${dto.mpw}"></li>	
+		<li th:text="${dto.mname}"></li>
+		<li th:text="${dto.regdate}"></li>
+	</ul>
+</body>
+</html>

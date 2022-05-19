@@ -67,7 +67,7 @@ public class BookController {
 	//도서 삭제 성공 : list
 	@PostMapping("/delete")
 	public String deletePost(int code) {
-		log.info("도서 삭제 완료"+code);
+		log.info("도서 삭제 요청 "+code);
 		
 		if(service.bookDelete(code)) {
 			return "redirect:/book/list";
@@ -75,6 +75,42 @@ public class BookController {
 		return "redirect:/book/delete";
 	}
 	
-	//
+	//도서 수정 폼 요청(update.jsp)
+	@GetMapping("/update")
+	public void updateGet() {
+		log.info("도서 수정 폼 요청");
+		
+	}
+	
+	//도서 수정 성공 : list
+	@PostMapping("/update")
+	public String updatePost(int code, int price) {
+		log.info("도서 정보 수정 요청 "+code+" "+price);
+		
+		if(service.bookUpdate(code, price)) {
+			return "redirect:/book/list";
+		}
+		return "redirect:/book/update";
+	}
+	
+	//도서 검색 폼 요청
+	@GetMapping("/search")
+	public void searchGet() {
+		log.info("도서 정보 검색");
+		
+	}
+	
+	//도서 검색 성공
+	@PostMapping("/search")
+	public String searchPost(String criteria, String keyword, Model model) {
+		log.info("도서 정보 검색 요청 "+criteria+" "+keyword);
+		
+		List<BookDTO> list = service.getSearchList(criteria, keyword);
+	
+		model.addAttribute("list", list);
+		
+		return "/book/list"; //  //WEB-INF/views/book/list.jsp
+//		return "redirect:/book/list";  => 컨트롤러 get(/book/list) 가기
+	}
 	
 }

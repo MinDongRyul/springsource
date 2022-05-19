@@ -26,6 +26,23 @@ bootstrap-4.6.1-dist/
 log4j.xml
 target/
 Servers/
+*.scss
+*.less
+*.map
+*.min.css
+font-awesome.css
+HELP-US-OUT.txt
+bootstrap.css
+bootstrap/
+*.eot
+*.svg
+*.ttf
+*.woff2
+*.woff
+*.otf
+sb-admin-2.*
+flot-data.*
+
 
 Servers/
 META-INF/

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.mapper.MemberMapper">
+
+	<!-- sql -->
+	<!-- 회원가입 -->
+	<insert id="insert">
+		insert into membertbl(userid, password, name, gender, email) 
+		values(#{userid}, #{password}, #{name}, #{gender}, #{email})	
+	</insert>
+	
+	<!-- 로그인 : userid, name -->
+	<select id="login" resultType="com.study.dto.AuthDTO">
+		select userid, name 
+		from membertbl 
+		where userid = #{userid} and password = #{password} 
+	</select>
+	
+	<update id="update">
+		update membertbl 
+		set password = #{confirm_password} 
+		where userid = #{userid}
+	</update>
+	
+	<delete id="delete">
+		delete 
+		from membertbl 
+		where password = #{current_password} and userid = #{userid}
+	</delete>
+	
+	<!-- 아이디 중복 반환값 String일 시 : resultType="java.lang.String -->
+	<select id="dupId" resultType="java.lang.String">
+		select userid 
+		from membertbl 
+		where userid = #{userid} 
+	</select>
+</mapper>

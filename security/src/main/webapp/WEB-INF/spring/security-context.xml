@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-5.6.xsd">
+	
+	
+	<bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+	
+	<!-- http로 들어오는 요청을 여기서 작업 -->
+	<security:http>
+		<!-- 컨트롤러의 login-page : 로그인 폼을 보여줄 컨트롤러 지정
+		     authentication-failure-url : 로그인 실패 시 적용할 컨트롤러 지정
+		     authentication-success-handler-ref : 로그인 성공 후 시작했었던 페이지로 돌아가는(기본) 것을 변경
+		                                          CustomLoginSuccessHandler.java를 통해 response 실행
+		-->
+		<security:form-login login-page="/login" authentication-failure-url="/login-error" 
+												 authentication-success-handler-ref="customLoginSuccessHandler"/>
+		<!-- 로그아웃 후 기본 경로는 login으로 이동됨 
+			 logout-success-url : 로그아웃 성공 후 특정 경로로 이동할 때(컨트롤러 지정)
+		-->
+		<security:logout invalidate-session="true" logout-success-url="/" delete-cookies="remember-me"/>
+		
+		<!-- pattern에 들어있는 경로로 요청이 들어올 때 요청을 가로채기 : 권한을 가지고 있느냐? -->
+		<security:intercept-url pattern="/user-page" access="hasRole('ROLE_USER')"/>
+		<security:intercept-url pattern="/admin-page" access="hasRole('ROLE_ADMIN')"/>
+		
+		<!-- 접근이 제한 된 경로에 들어가는 경우 처리 
+			 error-page : 컨트롤러 지정
+			 ref : 핸들러를 한번 거쳐서 컨트롤러로 들어가는 방식
+		-->
+		<!-- <security:access-denied-handler error-page="/access-denied" /> -->
+		<security:access-denied-handler ref="customAccessDeniedHandler" />
+		
+		<!-- 로그인 기억하기 : 쿠키에 사용자 정보를 암호화해서 기억하는 방식 -->
+		<!-- <security:remember-me/> -->
+		
+		<!-- 로그인 기억하기 : 데이터베이스 사용 // 알아서 잡아주고 table도 만드는 형식이 정해져있다. -->
+		<security:remember-me data-source-ref="ds" token-validity-seconds="604800"/>
+	</security:http>
+	
+	<security:authentication-manager>
+		<!-- 로그인 요청이 들어오면 CustomUserDetailService.java로 들어감 -->
+		<security:authentication-provider user-service-ref="customUserDetailService">
+			<security:password-encoder ref="encoder"/>
+		</security:authentication-provider>
+	</security:authentication-manager>
+	
+</beans>
+
+<!-- in memory 인증 방식 
+   	<security:authentication-manager>
+		<security:authentication-provider>
+			<security:user-service>
+				<security:user name="user1" password="{noop}user1" authorities="ROLE_USER"/> {noop} : 아직 암호화를 하지 않겠다.
+				<security:user name="admin" password="{noop}admin" authorities="ROLE_ADMIN, ROLE_USER"/>
+			</security:user-service>
+		</security:authentication-provider>
+	</security:authentication-manager> 
+-->

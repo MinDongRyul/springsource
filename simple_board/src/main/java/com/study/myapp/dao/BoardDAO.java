@@ -14,8 +14,8 @@ import com.study.myapp.dto.BoardDTO;
 
 @Repository
 //에러시 : Exception in thread "main" org.springframework.beans.factory.
-//        UnsatisfiedDependencyException: Error creating bean with name 
-//        'service': Unsatisfied dependency expressed through field 'dao';
+//       UnsatisfiedDependencyException: Error creating bean with name 
+//       'service': Unsatisfied dependency expressed through field 'dao';
 public class BoardDAO {
 	private Connection con;
 	

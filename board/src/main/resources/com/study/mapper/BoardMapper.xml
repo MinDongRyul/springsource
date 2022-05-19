@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.mapper.BoardMapper">
+	<!-- sql -->
+	
+	<!-- 페이지 나누기 개념 없을 때 -->
+	<!-- <select id="select" resultType="com.study.dto.BoardDTO">
+		select bno, title, writer, regdate, updatedate 
+		from spring_board 
+		where bno > 0 
+		order by bno desc
+	</select> -->
+	
+	<!-- 페이지 나누기 개념 있을 때 + 검색어가 있을 때도 생각해야한다. -->
+	<select id="select" resultType="com.study.dto.BoardDTO">
+		<![CDATA[
+		select bno, title, writer, regdate, updatedate, replycnt 
+		from (select /*+INDEX_DESC(spring_board pk_spring_board)*/ rownum rn, bno, title, writer, regdate, updatedate, replycnt
+	  		  from spring_board
+	  		  where 
+	  	]]>	  
+	  		  <include refid="criteria"></include>
+	  	<![CDATA[  
+	  		  bno > 0 and rownum <= (#{pageNum} * #{amount}) )
+		where rn > (#{pageNum} - 1) * #{amount}
+		]]>
+	</select>
+	
+	<!-- total 구하기 -->
+	<select id="totalCnt" resultType="int">
+		select count(*) 
+		from spring_board 
+		where 
+		<include refid="criteria"></include>
+		bno > 0
+	</select>
+	
+	<!-- 댓글 수 수정 -->
+	<update id="updateReplyCnt">
+		update spring_board 
+		set replycnt = replycnt + #{amount} 
+		where bno = #{bno}
+	</update>
+	
+	<!-- 동적 sql -->
+	<sql id="criteria">
+		<!-- 시작과 끝에 ( ) AND로 끝난다 
+			 prefixOverrides="OR" : where or 로 시작하면 막아 달라는 의미
+	 	-->
+		<trim prefix="(" suffix=") AND" prefixOverrides="OR">
+			<!-- collection="typeArr" : 배열을 돌림
+				 prefix="OR" : 시작을 할때 or로 해주어라 
+				 title like '%'||#{keyword}'%' or content like '%'||#{keyword}'%'
+				 -->
+			<foreach collection="typeArr" item="type">
+				<!-- criteria.java에 있는 getTypeArr를 이용해서 반복문을 돌림 -->
+				<trim prefix="OR">
+					<choose>
+						<when test="type=='T'.toString()">
+							title like '%'||#{keyword}||'%'
+						</when>
+						<when test="type=='C'.toString()">
+							content like '%'||#{keyword}||'%'
+						</when>
+						<when test="type=='W'.toString()">
+							writer like '%'||#{keyword}||'%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+
+	<insert id="insert">
+		<!-- selectKey : 주로 pk값을 미리 실행 한 후 특정 이름으로 보관 
+			 - keyProperty : 결과값이 세팅될 대상 프로퍼티
+			 - order : 키를 먼저 조회
+		-->
+		<!-- dual : 가상 테이블  -->
+		<!-- bno(가장최신 bno ex) 최근 게시물의 bno 가 541 이라면 
+		                    여기서 발생하는 bno는 542로 세팅) 발행 
+		     여기서 bno을 세팅해야 result값에 bno을 담아서 넘겨 줄수 있다.
+		-->
+		<selectKey keyProperty="bno" order="BEFORE" resultType="int">
+			select seq_board.nextval from dual
+		</selectKey>
+	
+		insert into spring_board(bno, title, content, writer) 
+		values(#{bno}, #{title}, #{content}, #{writer})
+	</insert>
+	 
+	 <select id="read" resultType="com.study.dto.BoardDTO">
+	 	select bno, title, content, writer 
+	 	from spring_board 
+	 	where bno = #{bno}
+	 </select>
+	 
+	 <!-- bno 가 일치하면 content, title 수정 update -->
+	 <update id="update">
+	 	update spring_board 
+		set content = #{content}, title = #{title}, updatedate = sysdate 
+		where bno = #{bno}	 	
+	 </update>
+	 
+	 <delete id="delete">
+	 	delete 
+	 	from spring_board 
+	 	where bno = #{bno}
+	 </delete>
+	 
+</mapper>

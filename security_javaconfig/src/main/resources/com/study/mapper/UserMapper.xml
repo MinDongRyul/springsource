@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.mapper.UserMapper">
+	<!-- 회원 가입 -->
+	<insert id="register">
+		insert into sp_user(userid,email,password) values(#{userid}, #{email}, #{password})
+	</insert>
+	
+	<!-- 권한 부여 -->
+	<insert id="registerAuth">
+		insert into sp_user_authority(userid, authority) values(#{userid}, #{authority})
+	</insert>
+	
+	<!-- 로그인 -->	
+	<resultMap type="com.study.dto.SpUser" id="spUser">
+		<id property="userid" column="userid"/>
+		<result property="email" column="email"/>
+		<result property="enabled" column="enabled"/>
+		<result property="password" column="password"/>	
+		<collection property="authorities" resultMap="authList"/>	
+	</resultMap>	
+	
+	<resultMap type="com.study.dto.SpUserAuthority" id="authList">
+		<result property="userid" column="userid"/>
+		<result property="authority" column="authority"/>
+	</resultMap>	
+	
+	<select id="read" resultMap="spUser">
+		select s1.userid, email, password, enabled, authority 
+		from sp_user s1 join sp_user_authority s2 on s1.userid = s2.userid 
+		where s1.userid = #{userid}
+	</select>
+</mapper>

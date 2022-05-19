@@ -17,31 +17,31 @@ public class BoardApp {
 //		BoardDTO insertDto = new BoardDTO(); 
 //		insertDto.setTitle("스프링 게시판");
 //		insertDto.setContent("스프링 게시판 작성하기");
-//		insertDto.setWriter("홍길동4");
+//		insertDto.setWriter("홍길동");
 //		
 //		System.out.println(service.boardInsert(insertDto)?"삽입성공":"삽입실패");
 	
 //		게시글 수정
 //		BoardDTO updateDto = new BoardDTO();
-//		updateDto.setBno(3);
-//		updateDto.setTitle("자바 게시판");
-//		updateDto.setContent("자바 게시판 작성하기");
-//		
+//		updateDto.setBno(2);
+//		updateDto.setTitle("스크립트 게시판");
+//		updateDto.setContent("스크립트 게시판 작성하기");
+		
 //		System.out.println(service.boardUpdate(updateDto) ? "수정성공":"수정실패");
 
 //		게시글 삭제
-		System.out.println(service.boardDelete(4) ? "삭제성공":"삭제실패");
+//		System.out.println(service.boardDelete(5) ? "삭제성공":"삭제실패");
 		
 //		특정 게시글 조회
-//		System.out.println(service.getRow(1));
+		System.out.println(service.getRow(1));
 		
 		
 		
 //		게시글 전체 목록 가져오기
-		List<BoardDTO> list = service.getList();
-		for(BoardDTO dto : list) {
-			System.out.println(dto);
-		}
+//		List<BoardDTO> list = service.getList();
+//		for(BoardDTO dto : list) {
+//			System.out.println(dto);
+//		}
 		
 	}
 }
